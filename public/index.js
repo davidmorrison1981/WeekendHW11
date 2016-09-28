@@ -11,7 +11,10 @@ var requestComplete = function() {
   var country = countries[200];
   console.log(country.timezones);
   var countriesByTimezone = formatCountryData(countries)
-  
+  console.log(countriesByTimezone[0][12]);
+  for(country of countriesByTimezone[0]) {
+    createSelectOption(country);
+  }
 }
 
 var makeRequest = function( url, callBack ) {
@@ -36,16 +39,17 @@ var formatCountryData = function( countryObject ) {
   for(var i=0; i<countryObject.length; i++){
     var name = countryObject[i].name;
     var capital = countryObject[i].capital;
+    if(capital == "") { continue };
     var lng = countryObject[i].latlng[1];
     var aCountry = new Country( name, capital );
 
     if ( lng > -15 && lng < 30 ) {
       timezone1.push( aCountry );
-      } else if (lng > 30 && lng < 90) {
+    } else if (lng > 30 && lng < 90) {
       timezone2.push( aCountry );
-      } else if (lng > 90 && lng < 180) {
+    } else if (lng > 90 && lng < 180) {
       timezone3.push( aCountry );
-      } else if (lng > 180 && lng < -15) {
+    } else if (lng > 180 && lng < -15) {
       timezone4.push( aCountry );
     }
   }
