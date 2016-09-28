@@ -4,17 +4,19 @@ var Country = function(name, capital) {
 }
 
 var requestComplete = function() {
-  console.log( "Kiyo loves jQuery" );
   if(this.status !== 200) return;
   var jsonString = this.responseText;
   var countries = JSON.parse(jsonString);
   var country = countries[200];
-  console.log(country.timezones);
   var countriesByTimezone = formatCountryData(countries)
-  console.log(countriesByTimezone[0][12]);
+
+  var testCountry = countriesByTimezone[0][2]
+  createCountryNameDisplay(testCountry);
   for(country of countriesByTimezone[0]) {
     createSelectOption(country);
   }
+  checkCapitalMatch(testCountry, countriesByTimezone);
+
 }
 
 var makeRequest = function( url, callBack ) {
@@ -39,7 +41,7 @@ var formatCountryData = function( countryObject ) {
   for(var i=0; i<countryObject.length; i++){
     var name = countryObject[i].name;
     var capital = countryObject[i].capital;
-    if(capital == "") { continue };
+    if(capital == "") continue;
     var lng = countryObject[i].latlng[1];
     var aCountry = new Country( name, capital );
 
@@ -49,7 +51,7 @@ var formatCountryData = function( countryObject ) {
       timezone2.push( aCountry );
     } else if (lng > 90 && lng < 180) {
       timezone3.push( aCountry );
-    } else if (lng > 180 && lng < -15) {
+    } else if (lng > -180 && lng < -15) {
       timezone4.push( aCountry );
     }
   }
@@ -61,11 +63,35 @@ var formatCountryData = function( countryObject ) {
   return allTimezones;
 }
 
+var createCountryNameDisplay = function(country) {
+  var countryParagraph = document.createElement( "p" );
+  countryParagraph.innerText = country.name;
+  var countryDiv = document.querySelector( "#countryName" );
+  countryDiv.appendChild( countryParagraph );
+}
+
 var createSelectOption = function(country) {
-  var optionElement = document.createElement( "option" )
+  var optionElement = document.createElement( "option" );
   optionElement.innerText = country.capital;
   var dropDown = document.querySelector("#capitals");
-  dropDown.appendChild(optionElement);
+  dropDown.appendChild( optionElement );
+}
+
+var createFailureResponse = function() {
+  var failureResponse = document.createElement( "h3" );
+  failureResponse.innerText = "FAILURE!"
+  var countryDiv = document.querySelector( "#countryName" );
+  countryDiv.appendChild( failureResponse );
+}
+
+var checkCapitalMatch = function(country, allTimezones) {
+  var dropDownItem = document.querySelector("select")
+  var userSelectedCapital = dropDownItem.value;
+  if(country.capital === userSelectedCapital) {
+    switchTimezone(allTimezones);
+  } else {
+    createFailureResponse();
+  }
 }
 
 var app = function(){
