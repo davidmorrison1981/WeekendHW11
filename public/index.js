@@ -38,6 +38,7 @@ var formatCountryData = function( countryObject ) {
     var capital = countryObject[i].capital;
     var lng = countryObject[i].latlng[1];
     var aCountry = new Country( name, capital );
+
     if ( lng > -15 && lng < 30 ) {
       timezone1.push( aCountry );
       } else if (lng > 30 && lng < 90) {
@@ -48,6 +49,7 @@ var formatCountryData = function( countryObject ) {
       timezone4.push( aCountry );
     }
   }
+
   allTimezones.push(timezone1);
   allTimezones.push(timezone2);
   allTimezones.push(timezone3);
@@ -55,8 +57,11 @@ var formatCountryData = function( countryObject ) {
   return allTimezones;
 }
 
-var createSelectOption = function() {
-  
+var createSelectOption = function(country) {
+  var optionElement = document.createElement( "option" )
+  optionElement.innerText = country.capital;
+  var dropDown = document.querySelector("#capitals");
+  dropDown.appendChild(optionElement);
 }
 
 var app = function(){
