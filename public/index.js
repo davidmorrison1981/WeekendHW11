@@ -10,7 +10,8 @@ var requestComplete = function() {
   var country = countries[200];
   var countriesByTimezone = formatCountryData(countries)
 
-  var testCountry = countriesByTimezone[0][2]
+  var testCountry = countriesByTimezone[0][2];
+  console.log(testCountry);
   createCountryNameDisplay(testCountry);
   for(country of countriesByTimezone[0]) {
     createSelectOption(country);
